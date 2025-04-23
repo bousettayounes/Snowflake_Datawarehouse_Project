@@ -1,0 +1,86 @@
+/*
+Purpose:
+--------
+This script loads raw CRM and ERP data into the corresponding 'bronze' staging tables in Snowflake.
+It clears existing data and imports fresh CSV files from the designated external stage.
+
+Steps:
+------
+1. Truncates each target table to ensure no residual data remains.
+2. Loads data from CSV files located in the '@RAW_CRM_ERP_FILES' external stage.
+3. Applies consistent CSV parsing options (e.g., delimiter, header skip, field enclosures).
+
+Files Loaded:
+-------------
+- cust_info.csv  → crm_cst_info
+- prd_info.csv   → crm_prd_info
+- sales_details.csv → crm_sales_details
+- sales_details.csv → erp_cust_AZ12  ⚠️ (Double-check source file)
+- LOC_A101.csv   → erp_loc_A101
+- PX_CAT_G1V2.csv → erp_px_cat_G1V2
+
+Notes:
+------
+- Ensure all CSV file names and formats match expected structures.
+- Reusing `sales_details.csv` for `erp_cust_AZ12` may be incorrect—verify the source file.
+- Intended for initial or periodic data refresh in the raw staging layer.
+*/
+
+
+CREATE OR REPLACE PROCEDURE bronze.load_bronze()
+  RETURNS STRING
+  LANGUAGE SQL
+  EXECUTE AS CALLER
+AS
+$$
+DECLARE
+  log_msg STRING := '';
+BEGIN
+
+  -- 1) CRM Customer Info
+  TRUNCATE TABLE bronze.crm_cst_info;
+  COPY INTO bronze.crm_cst_info
+    FROM @RAW_CRM_ERP_FILES/cust_info.csv
+    FILE_FORMAT = (TYPE='CSV', FIELD_DELIMITER=',', SKIP_HEADER=1, FIELD_OPTIONALLY_ENCLOSED_BY='"');
+  log_msg := log_msg || '✔ bronze.crm_cst_info loaded successfully.\n';
+
+  -- 2) CRM Product Info
+  TRUNCATE TABLE bronze.crm_prd_info;
+  COPY INTO bronze.crm_prd_info
+    FROM @RAW_CRM_ERP_FILES/prd_info.csv
+    FILE_FORMAT = (TYPE='CSV', FIELD_DELIMITER=',', SKIP_HEADER=1, FIELD_OPTIONALLY_ENCLOSED_BY='"');
+  log_msg := log_msg || '✔ bronze.crm_prd_info loaded successfully.\n';
+
+  -- 3) CRM Sales Details
+  TRUNCATE TABLE bronze.crm_sales_details;
+  COPY INTO bronze.crm_sales_details
+    FROM @RAW_CRM_ERP_FILES/sales_details.csv
+    FILE_FORMAT = (TYPE='CSV', FIELD_DELIMITER=',', SKIP_HEADER=1, FIELD_OPTIONALLY_ENCLOSED_BY='"');
+  log_msg := log_msg || '✔ bronze.crm_sales_details loaded successfully.\n';
+
+  -- 4) ERP Customer Data (AZ12)
+  TRUNCATE TABLE bronze.erp_cust_AZ12;
+  COPY INTO bronze.erp_cust_AZ12
+    FROM @RAW_CRM_ERP_FILES/CUST_AZ12.csv    -- ← verify this filename!
+    FILE_FORMAT = (TYPE='CSV', FIELD_DELIMITER=',', SKIP_HEADER=1, FIELD_OPTIONALLY_ENCLOSED_BY='"');
+  log_msg := log_msg || '✔ bronze.erp_cust_AZ12 loaded successfully.\n';
+
+  -- 5) ERP Location Data (A101)
+  TRUNCATE TABLE bronze.erp_loc_A101;
+  COPY INTO bronze.erp_loc_A101
+    FROM @RAW_CRM_ERP_FILES/LOC_A101.csv
+    FILE_FORMAT = (TYPE='CSV', FIELD_DELIMITER=',', SKIP_HEADER=1, FIELD_OPTIONALLY_ENCLOSED_BY='"');
+  log_msg := log_msg || '✔ bronze.erp_loc_A101 loaded successfully.\n';
+
+  -- 6) ERP Product Category Mapping (G1V2)
+  TRUNCATE TABLE bronze.erp_px_cat_G1V2;
+  COPY INTO bronze.erp_px_cat_G1V2
+    FROM @RAW_CRM_ERP_FILES/PX_CAT_G1V2.csv
+    FILE_FORMAT = (TYPE='CSV', FIELD_DELIMITER=',', SKIP_HEADER=1, FIELD_OPTIONALLY_ENCLOSED_BY='"');
+  log_msg := log_msg || '✔ bronze.erp_px_cat_G1V2 loaded successfully.\n';
+
+  RETURN log_msg;
+END;
+$$;
+
+CALL bronze.load_bronze();
