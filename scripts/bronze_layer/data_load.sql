@@ -1,8 +1,12 @@
 /*
+---------------------------------------------------------------------------------------------
+Stored Procedure Name: bronze.load_bronze
+Description: Loads data into the bronze layer of the Data Warehouse (Source -> Bronze).
+----------------------------------------------------------------------------------------------
 Purpose:
 --------
 This script loads raw CRM and ERP data into the corresponding 'bronze' staging tables in Snowflake.
-It clears existing data and imports fresh CSV files from the designated external stage.
+It clears existing data and imports fresh CSV files from the designated external stage. 
 
 Steps:
 ------
@@ -174,3 +178,6 @@ BEGIN
   RETURN log_msg;
 END;
 $$;
+
+
+CALL bronze.load_bronze();
