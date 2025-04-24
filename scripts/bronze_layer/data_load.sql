@@ -58,10 +58,10 @@ BEGIN
       );
     end_time := CURRENT_TIMESTAMP();
     duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);
-    log_msg := log_msg || '✔ bronze.crm_cst_info loaded successfully in ' || duration || ' seconds.\n';
+    log_msg := log_msg || '✔ -CRM- bronze.crm_cst_info loaded successfully in ' || duration || ' seconds.\n';
   EXCEPTION
     WHEN OTHER THEN
-      log_msg := log_msg || '❌ bronze.crm_cst_info failed: ' || ERROR_MESSAGE() || '\n';
+      log_msg := log_msg || '❌ -CRM- bronze.crm_cst_info failed: ' || ERROR_MESSAGE() || '\n';
   END;
 
   -- 2) CRM Product Info
@@ -78,10 +78,10 @@ BEGIN
       );
     end_time := CURRENT_TIMESTAMP();
     duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);
-    log_msg := log_msg || '✔ bronze.crm_prd_info loaded successfully in ' || duration || ' seconds.\n';
+    log_msg := log_msg || '✔ -CRM- bronze.crm_prd_info loaded successfully in ' || duration || ' seconds.\n';
   EXCEPTION
     WHEN OTHER THEN
-      log_msg := log_msg || '❌ bronze.crm_prd_info failed: ' || ERROR_MESSAGE() || '\n';
+      log_msg := log_msg || '❌ -CRM- bronze.crm_prd_info failed: ' || ERROR_MESSAGE() || '\n';
   END;
 
   -- 3) CRM Sales Details
@@ -98,10 +98,10 @@ BEGIN
       );
     end_time := CURRENT_TIMESTAMP();
     duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);
-    log_msg := log_msg || '✔ bronze.crm_sales_details loaded successfully in ' || duration || ' seconds.\n';
+    log_msg := log_msg || '✔ -CRM- bronze.crm_sales_details loaded successfully in ' || duration || ' seconds.\n';
   EXCEPTION
     WHEN OTHER THEN
-      log_msg := log_msg || '❌ bronze.crm_sales_details failed: ' || ERROR_MESSAGE() || '\n';
+      log_msg := log_msg || '❌ -CRM- bronze.crm_sales_details failed: ' || ERROR_MESSAGE() || '\n';
   END;
 
   -- 4) ERP Customer Data (AZ12)
@@ -118,10 +118,10 @@ BEGIN
       );
     end_time := CURRENT_TIMESTAMP();
     duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);
-    log_msg := log_msg || '✔ bronze.erp_cust_AZ12 loaded successfully in ' || duration || ' seconds.\n';
+    log_msg := log_msg || '✔ -ERP- bronze.erp_cust_AZ12 loaded successfully in ' || duration || ' seconds.\n';
   EXCEPTION
     WHEN OTHER THEN
-      log_msg := log_msg || '❌ bronze.erp_cust_AZ12 failed: ' || ERROR_MESSAGE() || '\n';
+      log_msg := log_msg || '❌ -ERP- bronze.erp_cust_AZ12 failed: ' || ERROR_MESSAGE() || '\n';
   END;
 
   -- 5) ERP Location Data (A101)
@@ -138,10 +138,10 @@ BEGIN
       );
     end_time := CURRENT_TIMESTAMP();
     duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);
-    log_msg := log_msg || '✔ bronze.erp_loc_A101 loaded successfully in ' || duration || ' seconds.\n';
+    log_msg := log_msg || '✔ -ERP- bronze.erp_loc_A101 loaded successfully in ' || duration || ' seconds.\n';
   EXCEPTION
     WHEN OTHER THEN
-      log_msg := log_msg || '❌ bronze.erp_loc_A101 failed: ' || ERROR_MESSAGE() || '\n';
+      log_msg := log_msg || '❌ -ERP- bronze.erp_loc_A101 failed: ' || ERROR_MESSAGE() || '\n';
   END;
 
   -- 6) ERP Product Category Mapping (G1V2)
@@ -158,10 +158,10 @@ BEGIN
       );
     end_time := CURRENT_TIMESTAMP();
     duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);
-    log_msg := log_msg || '✔ bronze.erp_px_cat_G1V2 loaded successfully in ' || duration || ' seconds.\n';
+    log_msg := log_msg || '✔ -ERP- bronze.erp_px_cat_G1V2 loaded successfully in ' || duration || ' seconds.\n';
   EXCEPTION
     WHEN OTHER THEN
-      log_msg := log_msg || '❌ bronze.erp_px_cat_G1V2 failed: ' || ERROR_MESSAGE() || '\n';
+      log_msg := log_msg || '❌ -ERP- bronze.erp_px_cat_G1V2 failed: ' || ERROR_MESSAGE() || '\n';
   END;
 
   -- End global timer
