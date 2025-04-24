@@ -37,7 +37,12 @@ DECLARE
   start_time TIMESTAMP;
   end_time TIMESTAMP;
   duration VARCHAR;
+  full_start_time TIMESTAMP;
+  full_end_time TIMESTAMP;
+  full_duration VARCHAR;
 BEGIN
+  -- Start global timer
+  full_start_time := CURRENT_TIMESTAMP();
 
   -- 1) CRM Customer Info
   BEGIN
@@ -52,7 +57,7 @@ BEGIN
         FIELD_OPTIONALLY_ENCLOSED_BY='"'
       );
     end_time := CURRENT_TIMESTAMP();
-    duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);  -- Cast duration to VARCHAR
+    duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);
     log_msg := log_msg || '✔ bronze.crm_cst_info loaded successfully in ' || duration || ' seconds.\n';
   EXCEPTION
     WHEN OTHER THEN
@@ -72,7 +77,7 @@ BEGIN
         FIELD_OPTIONALLY_ENCLOSED_BY='"'
       );
     end_time := CURRENT_TIMESTAMP();
-    duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);  -- Cast duration to VARCHAR
+    duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);
     log_msg := log_msg || '✔ bronze.crm_prd_info loaded successfully in ' || duration || ' seconds.\n';
   EXCEPTION
     WHEN OTHER THEN
@@ -92,7 +97,7 @@ BEGIN
         FIELD_OPTIONALLY_ENCLOSED_BY='"'
       );
     end_time := CURRENT_TIMESTAMP();
-    duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);  -- Cast duration to VARCHAR
+    duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);
     log_msg := log_msg || '✔ bronze.crm_sales_details loaded successfully in ' || duration || ' seconds.\n';
   EXCEPTION
     WHEN OTHER THEN
@@ -112,7 +117,7 @@ BEGIN
         FIELD_OPTIONALLY_ENCLOSED_BY='"'
       );
     end_time := CURRENT_TIMESTAMP();
-    duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);  -- Cast duration to VARCHAR
+    duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);
     log_msg := log_msg || '✔ bronze.erp_cust_AZ12 loaded successfully in ' || duration || ' seconds.\n';
   EXCEPTION
     WHEN OTHER THEN
@@ -132,7 +137,7 @@ BEGIN
         FIELD_OPTIONALLY_ENCLOSED_BY='"'
       );
     end_time := CURRENT_TIMESTAMP();
-    duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);  -- Cast duration to VARCHAR
+    duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);
     log_msg := log_msg || '✔ bronze.erp_loc_A101 loaded successfully in ' || duration || ' seconds.\n';
   EXCEPTION
     WHEN OTHER THEN
@@ -152,14 +157,20 @@ BEGIN
         FIELD_OPTIONALLY_ENCLOSED_BY='"'
       );
     end_time := CURRENT_TIMESTAMP();
-    duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);  -- Cast duration to VARCHAR
+    duration := CAST(DATEDIFF(SECOND, start_time, end_time) AS VARCHAR);
     log_msg := log_msg || '✔ bronze.erp_px_cat_G1V2 loaded successfully in ' || duration || ' seconds.\n';
   EXCEPTION
     WHEN OTHER THEN
       log_msg := log_msg || '❌ bronze.erp_px_cat_G1V2 failed: ' || ERROR_MESSAGE() || '\n';
   END;
 
-  -- Return final log
+  -- End global timer
+  full_end_time := CURRENT_TIMESTAMP();
+  full_duration := CAST(DATEDIFF(SECOND, full_start_time, full_end_time) AS VARCHAR);
+
+  -- Append total duration message
+  log_msg := log_msg || 'Loading Data into bronze layer is completed in ' || full_duration || ' seconds.';
+
   RETURN log_msg;
 END;
 $$;
