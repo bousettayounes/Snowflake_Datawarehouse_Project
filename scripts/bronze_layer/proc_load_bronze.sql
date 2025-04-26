@@ -225,6 +225,3 @@ BEGIN
   RETURN log_msg;
 END;
 $$;
-
--- Example execution
--- CALL bronze.load_bronze();
