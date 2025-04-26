@@ -1,4 +1,5 @@
-INSERT INTO silver.crm_cst_info(cst_id, 
+INSERT INTO silver.crm_cst_info(
+cst_id, 
 cst_key, 
 cst_first_name, 
 cst_last_name, 
@@ -55,7 +56,30 @@ CAST (prd_start_dt as DATE ) ,
 CAST(DATEADD(DAY, -1, LEAD(prd_start_dt) OVER (PARTITION BY prd_key ORDER BY prd_start_dt)) as Date) AS prd_end_dt ,
 FROM bronze.crm_prd_info
 
-
+SELECT 
+    sls_cust_id,
+    sls_prd_key, 
+    Case when sls_order_dt =0 or len(sls_order_dt) !=8 THEN NULL
+        ELSE CAST (sls_order_dt as VARCHAR(8))
+    END as sls_order_dt,
+    Case when sls_ship_dt =0 or len(sls_ship_dt) !=8 THEN NULL
+        ELSE CAST (sls_ship_dt as VARCHAR(8))
+    END as sls_ship_dt,
+    Case when sls_due_dt =0 or len(sls_due_dt) !=8 THEN NULL
+        ELSE CAST (sls_due_dt as VARCHAR(8))
+    END as sls_due_dt,
+    sls_ship_dt, 
+    sls_due_dt, 
+    sls_sales, 
+    sls_quantity, 
+    CAST(
+        CASE 
+            WHEN sls_price < 0 THEN ABS(sls_price)
+            WHEN sls_price IS NULL THEN 0
+            ELSE sls_price
+        END AS DECIMAL(10,2)
+    ) AS sls_price
+FROM bronze.crm_sales_details
 
 
 
