@@ -31,12 +31,12 @@ CREATE OR REPLACE TABLE silver.crm_sales_details (
     sls_ord_num NVARCHAR(50),            -- Sales order number
     sls_prd_key NVARCHAR(50),            -- Product key from sales
     sls_cust_id INT,                     -- Customer ID associated with the sale
-    sls_order_dt INT,                    -- ⚠️ Order date stored as INT, should convert to DATE
-    sls_ship_dt INT,                     -- ⚠️ Ship date stored as INT
-    sls_due_dt INT,                      -- ⚠️ Due date stored as INT
+    sls_order_dt DATE,                    -- ⚠️ Order date stored as INT, should convert to DATE
+    sls_ship_dt DATE,                     -- ⚠️ Ship date stored as INT
+    sls_due_dt DATE,                      -- ⚠️ Due date stored as INT
     sls_sales INT,                       -- Sales amount
     sls_quantity INT,                    -- Quantity sold
-    sls_price INT,                        -- Price per unit
+    sls_price NUMBER(38,2),                        -- Price per unit
     dwh_create_date TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP
 );
 

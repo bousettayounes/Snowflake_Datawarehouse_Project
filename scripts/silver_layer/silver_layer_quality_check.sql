@@ -53,35 +53,42 @@ having id_appearence > 1 or sls_ord_num is null
 ------------------------------------------------------------------------------------
 -- check unwanted spaces in the string columns  
 -- expectation : No unwanted spaces in the string columns
-select sls_ord_num from bronze.crm_sales_details where sls_ord_num != TRIM(sls_ord_num)
-select sls_prd_key from bronze.crm_sales_details where sls_prd_key != TRIM(sls_prd_key)
+select sls_ord_num from silver.crm_sales_details where sls_ord_num != TRIM(sls_ord_num)
+select sls_prd_key from silver.crm_sales_details where sls_prd_key != TRIM(sls_prd_key)
 
 ------------------------------------------------------------------------------------
 -- check NULLS or Negative numbers
 -- expectation : No NULLS or Negative numbers in the sales amount and quantity columns
-select SLS_CUST_ID from bronze.crm_sales_details where SLS_CUST_ID is null or SLS_CUST_ID < 0
-select SLS_ORDER_DT from bronze.crm_sales_details where SLS_ORDER_DT is null or SLS_ORDER_DT < 0
-select SLS_SHIP_DT from bronze.crm_sales_details where SLS_SHIP_DT is null or SLS_SHIP_DT < 0
-select SLS_DUE_DT from bronze.crm_sales_details where SLS_DUE_DT is null or SLS_DUE_DT < 0
-select SLS_SALES from bronze.crm_sales_details where SLS_SALES is null or SLS_SALES < 0
-select SLS_QUANTITY from bronze.crm_sales_details where SLS_QUANTITY is null or SLS_QUANTITY < 0
-select SLS_PRICE from bronze.crm_sales_details where SLS_PRICE is null or SLS_PRICE < 0
-
+select * from silver.crm_sales_details where SLS_CUST_ID is null 
+select * from silver.crm_sales_details where SLS_ORDER_DT is null -- the nulls represents the currepted date 
+select * from silver.crm_sales_details where SLS_SHIP_DT is null
+select * from silver.crm_sales_details where SLS_DUE_DT is null 
+select * from silver.crm_sales_details where SLS_SALES is null or SLS_SALES < 0
+select * from silver.crm_sales_details where SLS_QUANTITY is null or SLS_QUANTITY < 0
+select * from silver.crm_sales_details where SLS_PRICE is null or SLS_PRICE < 0
+select * from silver.crm_sales_details where SLS_PRICE*SLS_QUANTITY != SLS_SALES
 ------------------------------------------------------------------------------------
 -- check date format  , orders of dates
 --  expectation : date format should be YYYYMMDD , not 0 or null , and outliers dates should be checked the boundaries
 --  (e.g., 1900-01-01, 2100-12-31)
+select nullif(SLS_ORDER_DT,0) from silver.crm_sales_details where SLS_ORDER_DT <=0 
 or SLS_ORDER_DT >= 21001231 
 or SLS_ORDER_DT <= 19000101
-select nullif(SLS_SHIP_DT,0) from bronze.crm_sales_details where SLS_SHIP_DT <=0 
+select nullif(SLS_SHIP_DT,0) from silver.crm_sales_details where SLS_SHIP_DT <=0 
 or LEN(SLS_SHIP_DT) !=8
 or SLS_SHIP_DT >= 21001231 
 or SLS_SHIP_DT <= 19000101
-select nullif(SLS_DUE_DT,0) from bronze.crm_sales_details where SLS_DUE_DT <=0 
+select nullif(SLS_DUE_DT,0) from silver.crm_sales_details where SLS_DUE_DT <=0 
 or LEN(SLS_DUE_DT) !=8
 or SLS_DUE_DT >= 21001231 
 or SLS_DUE_DT <= 19000101
 --order of date columns 
-select SLS_ORDER_DT, SLS_SHIP_DT, SLS_DUE_DT from bronze.crm_sales_details 
+select SLS_ORDER_DT, SLS_SHIP_DT, SLS_DUE_DT from silver.crm_sales_details 
 where SLS_ORDER_DT > SLS_SHIP_DT or SLS_ORDER_DT > SLS_DUE_DT or SLS_SHIP_DT > SLS_DUE_DT
+
+-- CHECK PRICE COLUMN   
+-- expectation : price should be positive and not null
+select  sls_sales , sls_quantity , sls_price from silver.crm_sales_details  
+where sls_price*sls_quantity != sls_sales  OR  sls_price  is null OR sls_sales is null or sls_price <=0  or sls_quantity is null 
+
 
