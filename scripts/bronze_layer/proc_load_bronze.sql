@@ -2,6 +2,7 @@
 ---------------------------------------------------------------------------------------------
 Stored Procedure Name: bronze.load_bronze
 Description: Loads data into the bronze layer of the Data Warehouse (Source -> Bronze).
+EXECUTION : CALL bronze.load_bronze();
 ----------------------------------------------------------------------------------------------
 Purpose:
 --------

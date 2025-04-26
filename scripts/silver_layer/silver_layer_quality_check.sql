@@ -92,3 +92,38 @@ select  sls_sales , sls_quantity , sls_price from silver.crm_sales_details
 where sls_price*sls_quantity != sls_sales  OR  sls_price  is null OR sls_sales is null or sls_price <=0  or sls_quantity is null 
 
 
+-------------------------------------------------------------------------------------
+-- check ERP Customer Demographics (System AZ12)
+-- expectation : No NULLS or duplicates in the primary key and no unwanted spaces in the string columns 
+SELECT cid from silver.erp_cust_AZ12 where cid != trim(cid);
+SELECT cid  from silver.erp_cust_AZ12 where cid like'NAS%'
+------------------------------------------------------------------------------------------------
+-- check bdate column range
+-- expectation : bdate should be in the range of 1900-01-01 and 2100-12-31
+SELECT * 
+FROM silver.erp_cust_AZ12 
+WHERE bdate < '1900-01-01' OR bdate  > GETDATE();
+------------------------------------------------------------------------------------------------
+-- check GEN column values
+-- expectation : GEN should be either 'Male ' or 'Female'
+Select DISTINCT gen from silver.erp_cust_AZ12 
+-------------------------------------------------------------------------------------
+-- check ERP RONZE.ERP_LOC_A101 
+-- expectation : No NULLS or duplicates in the primary key and no unwanted spaces in the string columns 
+select cid from silver.erp_loc_A101 where cid != trim(cid);
+Select * from 
+(select TRIM(REPLACE(cid,'-','')) as cid from silver.erp_loc_A101) where cid in (select cid from silver.erp_cust_az12);
+
+-- check Ecntry column values
+-- expectation : No duplicates in the country column and no unwanted spaces in the string columns
+select Distinct cntry  from silver.erp_loc_A101 where cntry!=TRIM(cntry)
+-------------------------------------------------------------------------------------
+-- check erp product category mapping (system G1V2)
+-- expectation : No NULLS or duplicates in the primary key and no unwanted spaces in the string columns
+select id from silver.erp_px_cat_g1v2 where id != trim(id);
+Select cat from silver.erp_px_cat_g1v2 where cat != trim(cat);
+Select Distinct cat from silver.erp_px_cat_g1v2 ; 
+Select SUBCAT as subcat from silver.erp_px_cat_g1v2 where SUBCAT != trim(SUBCAT);
+Select Distinct SUBCAT from silver.erp_px_cat_g1v2 ; 
+Select MAINTENANCE from silver.erp_px_cat_g1v2 where MAINTENANCE != trim(MAINTENANCE) ; 
+Select Distinct MAINTENANCE from silver.erp_px_cat_g1v2 ; 
