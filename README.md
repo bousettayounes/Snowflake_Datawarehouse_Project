@@ -9,7 +9,7 @@ It enables scalable, organized, and business-ready data for analytics, reporting
 
 ## 📌 High-Level Architecture
 
-![High Level Architecture](./docs/architecture.png)
+![High Level Architecture](docs/Architecture.png)
 
 - **Source Systems**:  
   - ERP System (CSV files)  
