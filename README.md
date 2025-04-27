@@ -19,7 +19,7 @@ This modern data architecture accelerates time-to-insight while reducing technic
 
 ## 📌 High-Level Architecture
 
-![High Level Architecture](docs/Architecture.png)
+![High Level Architecture](docs/High_Level_Architecture.png)
 
 - **Source Systems**:  
   - ERP System (CSV files)  
