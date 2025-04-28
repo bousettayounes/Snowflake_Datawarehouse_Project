@@ -2,7 +2,8 @@
 
 ## Overview
 
-This project implements a comprehensive data warehouse solution using Snowflake, architected according to the industry-standard Bronze, Silver, and Gold layered approach. This robust framework transforms raw data into business-ready insights through progressive refinement stages.
+This project implements a comprehensive data warehouse solution using Snowflake, architected according to the industry-standard [Bronze, Silver, Gold] layered approach. 
+This robust framework transforms raw data into business-ready insights through progressive refinement stages.
 
 ---
 
@@ -39,6 +40,8 @@ This modern data architecture accelerates time-to-insight while reducing technic
 
 ## 🔄 Integration Model (CRM & ERP Systems)
 
+![Integration Model (CRM & ERP Systems)](docs/Data_Integration_Model.png)
+
 The Integration Model describes how CRM and ERP data are aligned and integrated:
 
 - **CRM System**:
@@ -59,6 +62,8 @@ The Integration Model describes how CRM and ERP data are aligned and integrated:
 ---
 
 ## 🔥 Data Pipeline: Bronze → Silver → Gold
+
+![Data Pipeline: Bronze → Silver → Gold)](docs/data_flow.png)
 
 The data pipeline is structured into three major transformation layers:
 
