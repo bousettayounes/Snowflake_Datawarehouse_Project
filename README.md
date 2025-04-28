@@ -147,8 +147,7 @@ The data pipeline is structured into three major transformation layers:
 ## 🚀 Technologies Used
 
 - **Snowflake** — Cloud Data Warehouse
-- **Power BI / Tableau** — Business Intelligence
-- **Python / SQL** — Data processing and orchestration
+- **PL SQL / TSQL** — Data processing and manipulation
 
 ---
 
